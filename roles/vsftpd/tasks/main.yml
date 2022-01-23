@@ -1,0 +1,23 @@
+---
+# tasks file for mysql
+- name: install package
+  apt:
+    name: vsftpd
+    state: latest
+    cache_valid_time: 3600    # update cache if more than an hour old
+
+- name: set write enable
+  lineinfile:
+    path: /etc/vsftpd.conf
+    regexp: "^#write_enable=YES"
+    line: write_enable=YES
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart vsftpd
+
+- name: start service
+  service:
+    name: vsftpd
+    state: started
+    enabled: yes
